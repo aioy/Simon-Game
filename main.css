@@ -1,7 +1,9 @@
 *{
     box-sizing: border-box;
--moz-box-sizing: border-box;
--webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: 0;
+	padding: 0;
 }
 body{
     background-color: gray;
@@ -24,6 +26,7 @@ body{
     border-radius: 50%;
     border-style: solid;
     border-width: 10px;
+    box-shadow: 0px 0px 12px #222;
 }
 
 /*=============Color buttons=================*/
@@ -32,28 +35,60 @@ body{
     flex-grow:1;
     flex-shrink: 1;
     flex-basis: 50%;
+    position: relative;
 }
 
 #green{
     background-color:green;
     border-bottom-left-radius: 100%;
     border-top: 10px solid;
-    border-right:10px solid
+    border-right:5px solid
 }
 
 #blue{
     background-color:blue;
     border-top-left-radius: 100%;
-    border-right:10px solid
+    border-right:5px solid
 }
 
 #yellow{
     background-color:yellow;
     border-bottom-right-radius: 100%;
     border-top: 10px solid;
+    border-left:5px solid;
 }
 
 #red{
     background-color:red;
     border-top-right-radius: 100%;
+    border-left: 5px solid;
+}
+
+
+/*=============Controller=================*/
+
+#controller{
+    z-index: 1;
+    height:14em;
+    width:14em;
+    background-color:gray;
+    border-radius: 100%;
+    border: 10px solid;
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+}
+
+#controller h3{
+    align-self: flex-start;
+    margin-top: 1em;
+    font-size: 30px;
+}
+
+#score{
+    align-self:center;
+}
+
+.color:hover{
+    opacity:.5;
 }
