@@ -30,5 +30,13 @@ let simonHTML = {
         simonHTML.displayScore.textContent = '-';
     } 
   }
+
+  function random () {
+    let moves = game.colors[Math.floor(Math.random() * game.colors.length)]
+    game.computerMoves.push(moves);
+    return game.computerMoves;
+  }
+
+  
   
   simonHTML.power.addEventListener('click', turnOn);          
