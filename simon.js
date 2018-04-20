@@ -46,62 +46,54 @@ let simonHTML = {
     game.computerMoves = [];
   }
 
-  function showMoves () {
+  function showMoves() {
 
     let i = -1;
+    let c = -1;
 
-    const start = setInterval(function(){
-      if(i >= game.computerMoves.length-1){
-        clearInterval(start);
-      }
-  
-      console.log(i + ' ' + game.computerMoves.length);
-  
-      const showColors = new Map([
-        [green, 'lime'],
-        [yellow, 'rgb(255,255,102)'],
-        [blue, 'dodgerblue'],
-        [red, 'salmon'],
-      ]);
-  
-      i++;
-  
-      let move = game.computerMoves[i];
-  
-      move.style.backgroundColor = showColors.get(move);
-    }, 1000);
-  }
+    const start = setInterval(function() {
+        if (i >= game.computerMoves.length - 1) {
+            clearInterval(start);
+        }
 
-  function b (){
-    showMoves();
-    removeMoves();
-  }
+        console.log(i + 'start ' + game.computerMoves.length);
 
-//revert the colors that were changed in showMoves
-function removeMoves() {
-  let c = -1;
-  //put at 2 seconds to change after showMoves is done
-  const computerStop = setInterval(function(){
+        const showColors = new Map([
+            [green, 'lime'],
+            [yellow, 'rgb(255,255,102)'],
+            [blue, 'dodgerblue'],
+            [red, 'salmon'],
+        ]);
 
-    console.log(c + 'stop ' + game.computerMoves.length);
-    
-    if(c > game.computerMoves.length){
-      clearInterval(computerStop);
-    
-    }
-    const colorKey = new Map([
-      [green, 'green'],
-      [yellow, 'yellow'],
-      [red, 'red'],
-      [blue, 'blue']
-    ]);
-  
-    c++;
-  
-    let move = game.computerMoves[c];
-  console.log(move);
-    //move.style.backgroundColor = colorKey.get(move);
-  }, 1300);
+        i++;
+
+        let move = game.computerMoves[i];
+
+        move.style.backgroundColor = showColors.get(move);
+        //revert the colors that were changed in showMoves
+        //put at 2 seconds to change after showMoves is done
+        const stop = setTimeout(function() {
+
+            console.log(c + 'stop ' + game.computerMoves.length);
+
+            if (c >= game.computerMoves.length - 1) {
+                clearInterval(stop);
+
+            }
+            const colorKey = new Map([
+                [green, 'green'],
+                [yellow, 'rgb(204,204,0)'],
+                [red, 'red'],
+                [blue, 'blue']
+            ]);
+
+            c++;
+
+            let move = game.computerMoves[c];
+
+            move.style.backgroundColor = colorKey.get(move);
+        }, 1000);
+    }, 2000);
 }
 
 

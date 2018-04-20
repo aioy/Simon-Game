@@ -76,7 +76,7 @@ body{
 }
 
 #yellow{
-    background-color:yellow;
+    background-color:rgb(204,204,0);
     border-bottom-right-radius: 100%;
     border-top: 10px solid;
     border-left:5px solid;
