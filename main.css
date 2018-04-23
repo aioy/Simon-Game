@@ -61,18 +61,10 @@ body{
     border-right:5px solid
 }
 
-#green:hover{
-  background-color:lime;
-}
-
 #blue{
     background-color:blue;
     border-top-left-radius: 100%;
     border-right:5px solid
-}
-
-#blue:hover{
-  background-color:dodgerblue;
 }
 
 #yellow{
@@ -82,20 +74,11 @@ body{
     border-left:5px solid;
 }
 
-#yellow:hover{
-  background-color: rgb(255,255,102);
-}
-
 #red{
     background-color:red;
     border-top-right-radius: 100%;
     border-left: 5px solid;
 }
-
-#red:hover{ 
-  background-color:salmon;
-}
-
 
 /*=============Controller=================*/
 
