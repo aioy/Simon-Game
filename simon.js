@@ -53,27 +53,47 @@ const colors = [
   new Map([[green, "green"], [yellow, "#CC0"], [red, "red"], [blue, "blue"]])
 ];
 
-const colorFlashPeriod = 1000; // in ms
+const sounds = {
+  green : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+  blue : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
+  yellow : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+  red : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3")
+};
+
 
 function showMoves() {
-    var moveCounter = 0; 
-    const timeoutCount = game.computerMoves.length * 2; 
-    (function nextColor() {
-        var move = game.computerMoves[moveCounter >> 1]; 
-        console.log(move);
-        move.style.backgroundColor = colors[(moveCounter++) & 1].get(move);
-        if (moveCounter < timeoutCount) { setTimeout(nextColor, colorFlashPeriod) }
-    })();
+  let i = 0;
+
+  const start = setInterval(function() {
+      if (i >= game.computerMoves.length) {
+          clearInterval(start);
+          return;
+      }
+
+      const move = game.computerMoves[i];
+      setLight(move, true);
+      setTimeout(setLight.bind(null, move, false), 1000); //Using bind to preset arguments
+      
+      i++;
+  }, 2000);
+}
+
+function setLight(color, isOn) {
+  if(isOn){
+    sounds[color.id].play();
+  }
+  color.style.backgroundColor = isOn ? colors[0].get(color) : colors[1].get(color);
 }
 
 function playerMoveDown(e){
   e.target.style.backgroundColor = colors[0].get(e.target);
+  let color = e.target.id;
+  sounds[color].play();
   return game.playerMoves.push(e.target);
 }
 
 function playerMoveUp(e){
   e.target.style.backgroundColor = colors[1].get(e.target);
-  console.log(game.computerMoves + 'computer' + game.playerMoves);
 }
 
 for (let i = 0; i < simonHTML.colors.length; i++){
