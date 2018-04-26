@@ -85,6 +85,16 @@ function setLight(color, isOn) {
   color.style.backgroundColor = isOn ? colors[0].get(color) : colors[1].get(color);
 }
 
+function compareMoves(e){
+  let b = 0;
+  if(e === simonHTML.colors[b]){
+    b++;
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function playerMoveDown(e){
   e.target.style.backgroundColor = colors[0].get(e.target);
   let color = e.target.id;
