@@ -11,7 +11,10 @@ const simonHTML = {
     on : false,
     start : false,
     strict : false,
+    playerTurn : false,
+    turn : 1,
     score : 0,
+    counter : 0,
     computerMoves : [],
     playerMoves : [],
     colors : [greenBox = document.getElementById('green'), 
@@ -32,6 +35,14 @@ const simonHTML = {
         simonHTML.power.classList.remove('moveRight');
         simonHTML.power.classList.add('moveLeft'); 
         game.on = false; 
+        game.turn = 1;
+        game.score = 0;
+        game.counter = 0;
+        resetMoves();
+        simonHTML.strictButton.style.backgroundColor = 'red';
+        simonHTML.startButton.style.backgroundColor = 'red';
+        game.start = false;
+        game.strict = false;
         simonHTML.displayScore.textContent = '-';
     } 
   }
@@ -40,12 +51,14 @@ const simonHTML = {
     for(let i = 0; i < num; i++){
       let moves = game.colors[Math.floor(Math.random() * game.colors.length)]
       game.computerMoves.push(moves);
+      console.log(game.computerMoves);
     }
     return game.computerMoves;
   }
 
   function resetMoves () {
     game.computerMoves = [];
+    game.playerMoves = [];
   }
 
 const colors = [
@@ -63,10 +76,14 @@ const sounds = {
 
 function showMoves() {
   let i = 0;
-
+  game.playerTurn = false;
   const start = setInterval(function() {
+      if(!game.on){
+        clearInterval(start);
+      }
       if (i >= game.computerMoves.length) {
           clearInterval(start);
+          game.playerTurn = true;
           return;
       }
 
@@ -86,20 +103,41 @@ function setLight(color, isOn) {
 }
 
 function compareMoves(e){
-  let b = 0;
-  if(e === simonHTML.colors[b]){
-    b++;
-    return true;
+  if(e === game.computerMoves[game.counter]){
+    game.counter++;
+    if(game.playerMoves.length === game.computerMoves.length && e === game.computerMoves[game.computerMoves.length-1]){
+      simonHTML.displayScore.textContent = ++game.score;
+      resetMoves();
+      randomMoves(++game.turn);
+      showMoves();
+      game.counter = 0;
+    }
+  } else if(game.strict) {
+    game.counter = 0;
+    game.turn = 0;
+    game.score = 0;
+    simonHTML.displayScore.textContent = game.score;
+    resetMoves();
+    randomMoves(++game.turn);
+    showMoves();
+
   } else {
-    return false;
+    game.playerMoves = [];
+    game.counter = 0;
+    showMoves();
   }
 }
 
 function playerMoveDown(e){
-  e.target.style.backgroundColor = colors[0].get(e.target);
-  let color = e.target.id;
-  sounds[color].play();
-  return game.playerMoves.push(e.target);
+  if(game.playerTurn){
+    e.target.style.backgroundColor = colors[0].get(e.target);
+    let color = e.target.id;
+    let compare = e.target;
+    sounds[color].play();
+    game.playerMoves.push(e.target);
+    compareMoves(compare);
+    console.log(game.playerMoves + 'down');
+  }
 }
 
 function playerMoveUp(e){
@@ -110,6 +148,36 @@ for (let i = 0; i < simonHTML.colors.length; i++){
   simonHTML.colors[i].addEventListener('mousedown', playerMoveDown);
   simonHTML.colors[i].addEventListener('mouseup', playerMoveUp);
 }
- 
 
-simonHTML.power.addEventListener('click', turnOn);          
+//for purple button
+simonHTML.power.addEventListener('click', turnOn);  
+
+simonHTML.strictButton.addEventListener('click', function(){
+  if(game.on){
+    if(!game.strict){
+      simonHTML.strictButton.style.backgroundColor = 'green';
+      game.strict = true;
+    } else if(game.strict){
+      simonHTML.strictButton.style.backgroundColor = 'red';
+      game.strict = false;
+    }
+  }
+});
+
+simonHTML.startButton.addEventListener('click', function(){
+  if(game.on){
+    if(!game.start){
+      game.start = true;
+      simonHTML.startButton.style.backgroundColor = 'green';
+      randomMoves(game.turn);
+      showMoves();
+    } else if (game.start){
+      game.start = false;
+      simonHTML.startButton.style.backgroundColor = 'red';
+      resetMoves();
+      game.turn = 1;
+      game.score = 0;
+      simonHTML.displayScore.textContent = game.score;
+    }
+  } 
+});
