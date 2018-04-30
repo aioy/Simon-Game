@@ -7,63 +7,63 @@ const simonHTML = {
     colors : document.getElementsByClassName('color')
   }
   
-  const game = {
-    on : false,
-    start : false,
-    strict : false,
-    playerTurn : false,
-    turn : 1,
-    score : 0,
-    counter : 0,
-    computerMoves : [],
-    playerMoves : [],
-    colors : [greenBox = document.getElementById('green'), 
-    blueBox = document.getElementById('blue'), 
-    yellowBox = document.getElementById('yellow'), 
-    redBox = document.getElementById('red')]
-  }
+const game = {
+  on : false,
+  start : false,
+  strict : false,
+  playerTurn : false,
+  turn : 1,
+  score : 0,
+  counter : 0,
+  computerMoves : [],
+  playerMoves : [],
+  colors : [greenBox = document.getElementById('green'), 
+  blueBox = document.getElementById('blue'), 
+  yellowBox = document.getElementById('yellow'), 
+  redBox = document.getElementById('red')]
+}
   
-  //move the purple div back and forth
-  function turnOn () {
-      if(!game.on){
-        simonHTML.power.classList.add('moveRight');
-        simonHTML.power.classList.remove('moveLeft')
-        game.on = true;
-        simonHTML.displayScore.textContent = game.score.toString();
-    }  
-    else if(game.on){ 
-        simonHTML.power.classList.remove('moveRight');
-        simonHTML.power.classList.add('moveLeft'); 
-        game.on = false; 
-        game.turn = 1;
-        game.score = 0;
-        game.counter = 0;
-        resetMoves();
-        simonHTML.strictButton.style.backgroundColor = 'red';
-        simonHTML.startButton.style.backgroundColor = 'red';
-        game.start = false;
-        game.strict = false;
-        simonHTML.displayScore.textContent = '-';
+//move the purple div back and forth
+function turnOn () {
+  if(!game.on){
+    simonHTML.power.classList.add('moveRight');
+    simonHTML.power.classList.remove('moveLeft')
+    game.on = true;
+    simonHTML.displayScore.textContent = game.score.toString();
+  }  
+  else if(game.on){ 
+    simonHTML.power.classList.remove('moveRight');
+    simonHTML.power.classList.add('moveLeft'); 
+    game.on = false; 
+    game.turn = 1;
+    game.score = 0
+    game.counter = 0;
+    resetMoves();
+    simonHTML.strictButton.style.backgroundColor = 'red';
+    simonHTML.startButton.style.backgroundColor = 'red';
+    game.start = false;
+    game.strict = false;
+    simonHTML.displayScore.textContent = '-';
     } 
   }
 
-  function randomMoves (num) {
-    for(let i = 0; i < num; i++){
-      let moves = game.colors[Math.floor(Math.random() * game.colors.length)]
-      game.computerMoves.push(moves);
-      console.log(game.computerMoves);
-    }
-    return game.computerMoves;
+function randomMoves (num) {
+  for(let i = 0; i < num; i++){
+    let moves = game.colors[Math.floor(Math.random() * game.colors.length)]
+    game.computerMoves.push(moves);
+    console.log(game.computerMoves);
   }
+  return game.computerMoves;
+}
 
-  function resetMoves () {
-    game.computerMoves = [];
-    game.playerMoves = [];
-  }
+function resetMoves () {
+  game.computerMoves = [];
+  game.playerMoves = [];
+}
 
 const colors = [
-  new Map([[green, "lime"], [yellow, "#FF6"], [blue, "dodgerblue"], [red, "salmon"]]),
-  new Map([[green, "green"], [yellow, "#CC0"], [red, "red"], [blue, "blue"]])
+  new Map([[game.colors[0], "lime"], [game.colors[2], "#FF6"], [game.colors[1], "dodgerblue"], [game.colors[3], "salmon"]]),
+  new Map([[game.colors[0], "green"], [game.colors[2], "#CC0"], [game.colors[3], "red"], [game.colors[1], "blue"]])
 ];
 
 const sounds = {
@@ -78,20 +78,20 @@ function showMoves() {
   let i = 0;
   game.playerTurn = false;
   const start = setInterval(function() {
-      if(!game.on){
-        clearInterval(start);
-      }
-      if (i >= game.computerMoves.length) {
-          clearInterval(start);
-          game.playerTurn = true;
-          return;
-      }
+    if(!game.on){
+      clearInterval(start);
+    }
+    if (i >= game.computerMoves.length) {
+      clearInterval(start);
+      game.playerTurn = true;
+      return;
+    }
 
-      const move = game.computerMoves[i];
-      setLight(move, true);
-      setTimeout(setLight.bind(null, move, false), 1000); //Using bind to preset arguments
+    const move = game.computerMoves[i];
+    setLight(move, true);
+    setTimeout(setLight.bind(null, move, false), 1000); //Using bind to preset arguments
       
-      i++;
+    i++;
   }, 2000);
 }
 
@@ -136,7 +136,6 @@ function playerMoveDown(e){
     sounds[color].play();
     game.playerMoves.push(e.target);
     compareMoves(compare);
-    console.log(game.playerMoves + 'down');
   }
 }
 
