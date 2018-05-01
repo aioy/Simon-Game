@@ -1,25 +1,25 @@
 
 const simonHTML = {
-    power : document.querySelector('.powerButton'),
-    strictButton : document.getElementById('strict'),
-    startButton : document.getElementById('start'),
-    displayScore : document.getElementById('score'),
-    colors : document.getElementsByClassName('color')
-  }
-  
+  power: document.querySelector('.powerButton'),
+  strictButton: document.getElementById('strict'),
+  startButton: document.getElementById('start'),
+  displayScore: document.getElementById('score'),
+  colors: document.getElementsByClassName('color')
+}
+
 const game = {
-  on : false,
-  start : false,
-  strict : false,
-  playerTurn : false,
-  turn : 1,
-  score : 0,
-  counter : 0,
-  computerMoves : [],
-  playerMoves : [],
-  colors : [greenBox = document.getElementById('green'), 
-  blueBox = document.getElementById('blue'), 
-  yellowBox = document.getElementById('yellow'), 
+  on: false,
+  start: false,
+  strict: false,
+  playerTurn: false,
+  turn: 1,
+  score: 0,
+  counter: 0,
+  computerMoves: [],
+  playerMoves: [],
+  colors: [greenBox = document.getElementById('green'),
+  blueBox = document.getElementById('blue'),
+  yellowBox = document.getElementById('yellow'),
   redBox = document.getElementById('red')]
 }
 
@@ -29,38 +29,38 @@ const colors = [
 ];
 
 const sounds = {
-  green : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-  blue : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
-  yellow : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-  red : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3")
+  green: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+  blue: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
+  yellow: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+  red: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3")
 };
-  
+
 //move the purple div back and forth
-function powerOn () {
-  if(!game.on){
+function powerOn() {
+  if (!game.on) {
     simonHTML.power.classList.add('moveRight');
     simonHTML.power.classList.remove('moveLeft')
     game.on = true;
     simonHTML.displayScore.textContent = game.score.toString();
-  }  
-  else if(game.on){ 
-    simonHTML.power.classList.remove('moveRight');
-    simonHTML.power.classList.add('moveLeft'); 
-    game.on = false; 
-    game.turn = 1;
-    game.score = 0
-    game.counter = 0;
-    resetMoves();
-    simonHTML.strictButton.style.backgroundColor = 'red';
-    simonHTML.startButton.style.backgroundColor = 'red';
-    game.start = false;
-    game.strict = false;
-    simonHTML.displayScore.textContent = '-';
-    } 
+    return;
   }
 
-function randomMoves (num) {
-  for(let i = 0; i < num; i++){
+  simonHTML.power.classList.remove('moveRight');
+  simonHTML.power.classList.add('moveLeft');
+  game.on = false;
+  game.turn = 1;
+  game.score = 0
+  game.counter = 0;
+  resetMoves();
+  simonHTML.strictButton.style.backgroundColor = 'red';
+  simonHTML.startButton.style.backgroundColor = 'red';
+  game.start = false;
+  game.strict = false;
+  simonHTML.displayScore.textContent = '-';
+}
+
+function randomMoves(num) {
+  for (let i = 0; i < num; i++) {
     let moves = game.colors[Math.floor(Math.random() * game.colors.length)]
     game.computerMoves.push(moves);
     console.log(game.computerMoves);
@@ -68,7 +68,7 @@ function randomMoves (num) {
   return game.computerMoves;
 }
 
-function resetMoves () {
+function resetMoves() {
   game.computerMoves = [];
   game.playerMoves = [];
 }
@@ -76,8 +76,8 @@ function resetMoves () {
 function showMoves() {
   let i = 0;
   game.playerTurn = false;
-  const start = setInterval(function() {
-    if(!game.on){
+  const start = setInterval(function () {
+    if (!game.on) {
       clearInterval(start);
     }
     if (i >= game.computerMoves.length) {
@@ -89,29 +89,33 @@ function showMoves() {
     const move = game.computerMoves[i];
     setLight(move, true);
     setTimeout(setLight.bind(null, move, false), 1000); //Using bind to preset arguments
-      
+
     i++;
   }, 2000);
 }
 
 function setLight(color, isOn) {
-  if(isOn){
+  if (isOn) {
     sounds[color.id].play();
   }
   color.style.backgroundColor = isOn ? colors[0].get(color) : colors[1].get(color);
 }
 
-function compareMoves(e){
-  if(e === game.computerMoves[game.counter]){
+function compareMoves(e) {
+  if (e === game.computerMoves[game.counter]) {
     game.counter++;
-    if(game.playerMoves.length === game.computerMoves.length && e === game.computerMoves[game.computerMoves.length-1]){
+    if (game.playerMoves.length === game.computerMoves.length
+      && e === game.computerMoves[game.computerMoves.length - 1]) {
       simonHTML.displayScore.textContent = ++game.score;
       resetMoves();
       randomMoves(++game.turn);
       showMoves();
       game.counter = 0;
     }
-  } else if(game.strict) {
+    return;
+  }
+
+  if (game.strict) {
     game.counter = 0;
     game.turn = 0;
     game.score = 0;
@@ -119,63 +123,72 @@ function compareMoves(e){
     resetMoves();
     randomMoves(++game.turn);
     showMoves();
-
-  } else {
-    game.playerMoves = [];
-    game.counter = 0;
-    showMoves();
+    return;
   }
+
+  game.playerMoves = [];
+  game.counter = 0;
+  showMoves();
+
 }
 
-function playerClickDown(e){
-  if(game.playerTurn){
-    e.target.style.backgroundColor = colors[0].get(e.target);
-    let color = e.target.id;
-    let compare = e.target;
-    sounds[color].play();
-    game.playerMoves.push(e.target);
-    compareMoves(compare);
+function playerClickDown(e) {
+  if (!game.playerTurn) {
+    return;
   }
+
+  e.target.style.backgroundColor = colors[0].get(e.target);
+  let color = e.target.id;
+  let compare = e.target;
+  sounds[color].play();
+  game.playerMoves.push(e.target);
+  compareMoves(compare);
 }
 
-function playerClickUp(e){
+function playerClickUp(e) {
   e.target.style.backgroundColor = colors[1].get(e.target);
 }
 
-for (let i = 0; i < simonHTML.colors.length; i++){
+for (let i = 0; i < simonHTML.colors.length; i++) {
   simonHTML.colors[i].addEventListener('mousedown', playerClickDown);
   simonHTML.colors[i].addEventListener('mouseup', playerClickUp);
 }
 
 //for purple button
-simonHTML.power.addEventListener('click', powerOn);  
+simonHTML.power.addEventListener('click', powerOn);
 
-simonHTML.strictButton.addEventListener('click', function(){
-  if(game.on){
-    if(!game.strict){
-      simonHTML.strictButton.style.backgroundColor = 'green';
-      game.strict = true;
-    } else if(game.strict){
-      simonHTML.strictButton.style.backgroundColor = 'red';
-      game.strict = false;
-    }
+simonHTML.strictButton.addEventListener('click', function () {
+  if (!game.on) {
+    return;
   }
+
+  if (!game.strict) {
+    simonHTML.strictButton.style.backgroundColor = 'green';
+    game.strict = true;
+    return;
+  }
+
+  simonHTML.strictButton.style.backgroundColor = 'red';
+  game.strict = false;
 });
 
-simonHTML.startButton.addEventListener('click', function(){
-  if(game.on){
-    if(!game.start){
-      game.start = true;
-      simonHTML.startButton.style.backgroundColor = 'green';
-      randomMoves(game.turn);
-      showMoves();
-    } else if (game.start){
-      game.start = false;
-      simonHTML.startButton.style.backgroundColor = 'red';
-      resetMoves();
-      game.turn = 1;
-      game.score = 0;
-      simonHTML.displayScore.textContent = game.score;
-    }
-  } 
+simonHTML.startButton.addEventListener('click', function () {
+  if (!game.on) {
+    return;
+  }
+
+  if (!game.start) {
+    game.start = true;
+    simonHTML.startButton.style.backgroundColor = 'green';
+    randomMoves(game.turn);
+    showMoves();
+    return;
+  }
+
+  game.start = false;
+  simonHTML.startButton.style.backgroundColor = 'red';
+  resetMoves();
+  game.turn = 1;
+  game.score = 0;
+  simonHTML.displayScore.textContent = game.score;
 });
