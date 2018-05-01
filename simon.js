@@ -22,9 +22,21 @@ const game = {
   yellowBox = document.getElementById('yellow'), 
   redBox = document.getElementById('red')]
 }
+
+const colors = [
+  new Map([[game.colors[0], "lime"], [game.colors[2], "#FF6"], [game.colors[1], "dodgerblue"], [game.colors[3], "salmon"]]),
+  new Map([[game.colors[0], "green"], [game.colors[2], "#CC0"], [game.colors[3], "red"], [game.colors[1], "blue"]])
+];
+
+const sounds = {
+  green : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+  blue : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
+  yellow : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+  red : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3")
+};
   
 //move the purple div back and forth
-function turnOn () {
+function powerOn () {
   if(!game.on){
     simonHTML.power.classList.add('moveRight');
     simonHTML.power.classList.remove('moveLeft')
@@ -60,19 +72,6 @@ function resetMoves () {
   game.computerMoves = [];
   game.playerMoves = [];
 }
-
-const colors = [
-  new Map([[game.colors[0], "lime"], [game.colors[2], "#FF6"], [game.colors[1], "dodgerblue"], [game.colors[3], "salmon"]]),
-  new Map([[game.colors[0], "green"], [game.colors[2], "#CC0"], [game.colors[3], "red"], [game.colors[1], "blue"]])
-];
-
-const sounds = {
-  green : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-  blue : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
-  yellow : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-  red : new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3")
-};
-
 
 function showMoves() {
   let i = 0;
@@ -128,7 +127,7 @@ function compareMoves(e){
   }
 }
 
-function playerMoveDown(e){
+function playerClickDown(e){
   if(game.playerTurn){
     e.target.style.backgroundColor = colors[0].get(e.target);
     let color = e.target.id;
@@ -139,17 +138,17 @@ function playerMoveDown(e){
   }
 }
 
-function playerMoveUp(e){
+function playerClickUp(e){
   e.target.style.backgroundColor = colors[1].get(e.target);
 }
 
 for (let i = 0; i < simonHTML.colors.length; i++){
-  simonHTML.colors[i].addEventListener('mousedown', playerMoveDown);
-  simonHTML.colors[i].addEventListener('mouseup', playerMoveUp);
+  simonHTML.colors[i].addEventListener('mousedown', playerClickDown);
+  simonHTML.colors[i].addEventListener('mouseup', playerClickUp);
 }
 
 //for purple button
-simonHTML.power.addEventListener('click', turnOn);  
+simonHTML.power.addEventListener('click', powerOn);  
 
 simonHTML.strictButton.addEventListener('click', function(){
   if(game.on){
